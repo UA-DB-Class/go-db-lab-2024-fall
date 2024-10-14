@@ -164,6 +164,8 @@ Modify your join implementation in `join_op.go` to pass the test `TestBigJoinOpt
 
 ### 2.2. Aggregates
 
+Note: The implementation for this section has already been provided in lab1 under the agg module. Therefore, there is no need to write any additional code. Please refer to the implementation in lab1 to understand how the aggregate operator works.
+
 The aggregate operator implements basic SQL aggregates with a `GROUP
 BY` clause. You will need to implement the five SQL aggregates (`COUNT`, `SUM`, `AVG`,
 `MIN`, `MAX`) and support grouping over zero or more fields.
@@ -190,7 +192,7 @@ As for `AggState`, the purpose is to maintain some running value for the aggrega
 `MIN`, or `MAX`) when you go through the child iterators. For example, for the `SUM` operator, you will probably want to maintain some number representing the running sum up to the current tuple. Every aggregation operation needs to implement the interface methods: `Init`, `Copy`, `AddTuple`, `Finalize`, and `GetTupleDesc`. In general, we `Init`-ialize the aggregation state at the beginning, `AddTuple` of all relevant child tuples, and then call `Finalize` at the end to retrieve the aggregation results. This intuition should hint at how to implement the five aggregation operations and which fields to maintain. Furthermore, we have provided our implementation of the `COUNT` aggregation state, which may help you understand how some methods work.
 
 
-### 2.2. Insertion and deletion
+### 2.3. Insertion and deletion
 
 Now that you have written all of the aggregations, you will implement the `Insert` and `Delete` operators.
 
@@ -223,7 +225,7 @@ Implement the skeleton methods in:
 At this point, your code should pass the unit tests in `insert_op_test.go` and `delete_op_test.go`.
 
 
-### 2.3. Projection
+### 2.4. Projection
 
 
 You will now implement the projection operation. Project iterates through its child, selects some of each tuple's fields, and returns them. Optionally, you will need to support the `DISTINCT` keyword, meaning that identical tuples should be returned only once. For example, given a dataset like:
@@ -280,7 +282,7 @@ Implement the skeleton methods in:
 At this point, your code should pass the unit tests in `project_op_test.go`. Passing `TestProjectDistinctOptional` is optional;  if you pass it, we will offer 5% additional extra credit on the lab.  Please be sure to describe how you implemented support for distinct in your writeup.
 
 
-### 2.4. Order By
+### 2.5. Order By
 
 
 You will now implement the "order by" operation. It iterates through its child in a particular order. It needs to support ordering by more than one field, with each field in either ascending or descending order.   For example, consider the query:
@@ -325,7 +327,7 @@ Implement the skeleton methods in:
 
 At this point, your code should pass the unit tests in `order_by_test.go`.
 
-### 2.5. Limit
+### 2.6. Limit
 
 You will now implement the limit operation. Limit iterates through its child and selects the first `n` tuples it sees. If the child returns `m < n` tuples, the limit operator only returns `m` tuples.
 
@@ -343,7 +345,7 @@ At this point, your code should pass the unit tests in `limit_op_test.go`.
 
 <a name="query_walkthrough"></a>
 
-### 2.6. Composing Operators
+### 2.7. Composing Operators
 
 At this point, you've implemented all the operators you need for a basic query plan.  You can construct a variety of queries by composing these operators together into plans.  We've provided a simple example in `simple_query_test.go`.  It runs code like the following (we've omitted the error handling from the code below, which is included in the actual test):
 ```
@@ -381,7 +383,7 @@ This is equivalent to the query `SELECT COUNT(*) FROM t, t2 WHERE t.name = t2.na
 
 You shouldn't need to implement anything extra to pass the `TestSimpleQuery` test.
 
-### 2.7. Query Parser
+### 2.8. Query Parser
 
 Because it's very cumbersome to compose operators to make queries like this, we've provided a parser for you.  This allows you to input SQL queries and get a result set.  We've also built a query shell that allows you to interact with the parser.  To run it, type `go run main.go` from the top-level godb directory in your terminal.  This will display:
 
